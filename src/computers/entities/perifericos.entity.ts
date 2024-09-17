@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Computer } from './computer.entity';
 
 @Entity()
 export class Perifericos {
@@ -7,4 +8,7 @@ export class Perifericos {
 
   @Column()
   name: string;
+
+  @ManyToOne(() => Computer, (computer) => computer.perifericos)
+  computer: Computer;
 }

@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Perifericos } from '../entities/perifericos.entity';
+import { Perifericos } from './perifericos.entity';
 
 @Entity()
 export class Computer {
@@ -14,4 +14,7 @@ export class Computer {
 
   @Column()
   dataFabricacao: number;
+
+  @OneToMany(() => Perifericos, (periferico) => periferico.computer, { cascade: true, onDelete: 'CASCADE' })
+  perifericos: Perifericos[];
 }

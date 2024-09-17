@@ -3,6 +3,7 @@ import { ComputersModule } from './computers/computers.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { Computer } from './computers/entities/computer.entity';
+import { Perifericos } from './computers/entities/perifericos.entity';
 
 @Module({
   imports: [ComputersModule, TypeOrmModule.forRoot({
@@ -12,7 +13,7 @@ import { Computer } from './computers/entities/computer.entity';
     username: 'root',
     password: '',
     database: 'computador',
-    entities: [Computer],
+    entities: [Computer,Perifericos],
     synchronize: true,
   }),]
 })

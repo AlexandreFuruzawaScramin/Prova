@@ -27,8 +27,13 @@ export class ComputersController {
     return this.computersService.update(+id, updateComputerDto);
   }
 
-  @Delete(':id')
+  @Delete('periferico/:id')
   removePeriferico(@Param('id') id: string) {
     return this.computersService.removePeriferico(+id);
+  }
+
+  @Delete(':id')
+  removeComputer(@Param('id') id: string) {
+    return this.computersService.removeComputer(+id);
   }
 }
