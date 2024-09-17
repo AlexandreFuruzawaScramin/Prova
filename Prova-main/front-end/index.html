@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciamento de Computadores e Periféricos</title>
+</head>
+<body>
+  <h1>Gerenciamento de Computadores e Periféricos</h1>
+
+  <h2>Criar Computador com Periféricos</h2>
+<form id="formCriarComputador">
+  <input type="text" id="nomeComputador" placeholder="Nome do Computador" required>
+  <input type="text" id="corComputador" placeholder="Cor" required>
+  <input type="number" id="dataFabricacaoComputador" placeholder="Data de Fabricação" required>
+  <textarea id="nomesPerifericos" placeholder="Nome dos Periféricos (separados por vírgula)" required></textarea>
+  <button type="submit">Criar Computador com Periféricos</button>
+</form>
+
+  <h2>Atualizar Computador</h2>
+  <form id="formAtualizarComputador">
+    <input type="number" id="idComputadorAtualizar" placeholder="ID do Computador" required>
+    <input type="text" id="novoNomeComputador" placeholder="Novo Nome">
+    <input type="text" id="novaCorComputador" placeholder="Nova Cor">
+    <input type="number" id="novaDataFabricacaoComputador" placeholder="Nova Data de Fabricação">
+    <button type="submit">Atualizar Computador</button>
+  </form>
+
+  <h2>Ver Todos os Computadores</h2>
+  <button id="botaoVerComputadores">Mostrar Computadores</button>
+  <ul id="listaComputadores"></ul>
+
+  <h2>Deletar Periférico</h2>
+  <form id="formDeletarPeriferico">
+    <input type="number" id="idPerifericoDeletar" placeholder="ID do Periférico" required>
+    <button type="submit">Deletar Periférico</button>
+  </form>
+
+  <h2>Deletar Computador</h2>
+  <form id="formDeletarComputador">
+    <input type="number" id="idComputadorDeletar" placeholder="ID do Computador" required>
+    <button type="submit">Deletar Computador</button>
+  </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script>
+    const apiUrl = 'http://localhost:3000'; 
+  
+    document.getElementById('formCriarComputador').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nome = document.getElementById('nomeComputador').value;
+      const cor = document.getElementById('corComputador').value;
+      const dataFabricacao = document.getElementById('dataFabricacaoComputador').value;
+      const nomesPerifericos = document.getElementById('nomesPerifericos').value;
+  
+      const perifericos = nomesPerifericos.split(',').map(nome => ({ name: nome.trim() }));
+  
+      await fetch(`${apiUrl}/computers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: nome, color: cor, dataFabricacao, perifericos }),
+      });
+    });
+  
+    document.getElementById('formAtualizarComputador').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('idComputadorAtualizar').value;
+      const nome = document.getElementById('novoNomeComputador').value;
+      const cor = document.getElementById('novaCorComputador').value;
+      const dataFabricacao = document.getElementById('novaDataFabricacaoComputador').value;
+  
+      await fetch(`${apiUrl}/computers/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: nome, color: cor, dataFabricacao }),
+      });
+    });
+  
+    document.getElementById('botaoVerComputadores').addEventListener('click', async () => {
+      const response = await fetch(`${apiUrl}/computers`);
+      if (!response.ok) {
+        alert('Erro ao buscar os computadores');
+        return;
+      }
+      const computers = await response.json();
+      const listaComputadores = document.getElementById('listaComputadores');
+      listaComputadores.innerHTML = computers.map(computer => `
+        <li>${computer.name} - ${computer.color} - ${computer.dataFabricacao}</li>
+      `).join('');
+    });
+  
+    document.getElementById('formDeletarPeriferico').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('idPerifericoDeletar').value;
+  
+      await fetch(`${apiUrl}/computers/periferico/${id}`, { method: 'DELETE' });
+    });
+
+    document.getElementById('formDeletarComputador').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('idComputadorDeletar').value;
+  
+      await fetch(`${apiUrl}/computers/${id}`, { method: 'DELETE' });
+    });
+  </script>
+</body>
+</html>
